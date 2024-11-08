@@ -1,0 +1,58 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  min-height: 100vh;
+  display: grid;
+  place-content: center;
+}
+
+.App {
+  border: 2px solid red;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  gap: 1rem;
+  width: 100%;
+}
+
+.inputWrapper {
+  border: 2px solid aqua;
+  display: flex;
+}
+
+.ingredientsArea {
+  border: 2px solid yellow;
+}
+
+.ingredientWrapper {
+  border: 2px solid red;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ingredientInputWrapper {
+  border: 2px solid green;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.preparingArea {
+  border: 2px solid yellow;
+}
+
+.hidden {
+  display: none;
+}
+
+.RootRoute {
+  position: relative;
+  border: 2px solid rgb(102, 255, 0);
+  width: 100vw;
+  height: 100vh;
+}
