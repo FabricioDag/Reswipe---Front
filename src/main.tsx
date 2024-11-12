@@ -5,7 +5,7 @@ import './index.css';
 
 import ErrorPage from './error-page';
 
-import { Root, Profile, Recipe, RecipeForm, Feed, Swiper } from './routes';
+import { Root, Profile, Recipe, RecipeForm, Feed, Swiper, Login } from './routes';
 
 const router = createBrowserRouter([
   {
@@ -36,6 +36,11 @@ const router = createBrowserRouter([
       {
         path: '/swiper',
         element: <Swiper />,
+      },
+
+      {
+        path: '/login',
+        element: <Login />,
       },
     ],
   },

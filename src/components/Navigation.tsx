@@ -55,6 +55,14 @@ const Navigation = () => {
       >
         <FontAwesomeIcon icon={faUser} />
       </StyledNavLink>
+
+      {/* ---- Teste integração front/back ---- */}
+      <StyledNavLink
+        to="/login"
+        className={({ isActive }) => (isActive ? 'active' : '')}
+      >
+        <FontAwesomeIcon icon={faUser} />
+      </StyledNavLink>
     </StyledNav>
   );
 };
