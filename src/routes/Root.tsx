@@ -6,12 +6,12 @@ import { useEffect, useState } from "react";
 const Root = () => {
   const [data, setData] = useState(null);
 
-  useEffect(() => {
-    fetch("http://localhost:3001/api")
-      .then((response) => response.json())
-      .then((data) => setData(data.message))
-      .catch((error) => console.error("Erro ao buscar dados:", error));
-  }, []);
+  // useEffect(() => {
+  //   fetch("http://localhost:3001/api")
+  //     .then((response) => response.json())
+  //     .then((data) => setData(data.message))
+  //     .catch((error) => console.error("Erro ao buscar dados:", error));
+  // }, []);
 
   return (
     <div className="RootRoute">
