@@ -1,94 +1,6 @@
-import styled from 'styled-components';
+import styled, { css, keyframes } from "styled-components";
 
-import { useState } from 'react';
-
-const Swiper = () => {
-  // Controle da movimentação das cartas
-  const [isDragging, setIsDragging] = useState(false);
-  const [startPosition, setStartPosition] = useState(0);
-  const [translate, setTranslate] = useState<number>(0);
-
-  const cardData = ["Card 1", "Card 2", "Card 3", "Card 4", "Card 5"]; // Dados das cartas
-
-  // Controle da ordem das cartas
-  const [cards, setCards] = useState(cardData);
-  const [isAnimating, setIsAnimating] = useState(false); // Estado para controlar animação
-
-  const [animateOut, setAnimateOut] = useState<"left" | "right" | null>(null);
-
-  const handleMouseDown = (event:any) => {
-    setIsDragging(true);
-    setStartPosition(event.clientX);
-  };
-
-  const handleMouseMove = (event:any) => {
-    if (isDragging) {
-      const currentPosition = event.clientX;
-      setTranslate(currentPosition - startPosition);
-    }
-  };
-
-  const handleMouseUp = () => {
-    setIsDragging(false);
-    setTranslate(0);
-    if(translate > 120  || translate < -120){
-      handleMoveCard()
-    }
-  };
-
-  // Remover a carta do topo
-  const handleRemoveCard = () => {
-    setCards((prevCards) => prevCards.slice(1));
-    setAnimateOut(null); // Resetar animação após a remoção
-  };
-
-  const handleMoveCard = () => {
-    if (isAnimating) return; // Impede outra animação enquanto a atual não termina
-    
-    setIsAnimating(true);
-
-    // Temporizador para esperar a animação completar antes de mover a carta
-    setTimeout(() => {
-      setCards((prevCards) => {
-        const [topCard, ...rest] = prevCards;
-        return [...rest]; // remove a carta do topo 
-      });
-      setIsAnimating(false); // Reseta o estado de animação
-    }, 500); // Tempo da animação deve coincidir com a duração em CSS
-  };
-
-  return (
-    <ContainerSwiper>
-      <p>Translate:{translate}</p>
-      <p>Qt Cartas:{cards.length}</p>
-      <CardsWrapper
-        onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
-      > 
-        
-        {cards.map((card, index) => (
-        <Card 
-          key={index} 
-          className={`${index === 0 ? "attached" : ""}`}
-          translate={translate}
-          style = {{
-            zIndex: cards.length - index,
-          }}
-        >
-          {card}
-        </Card>
-      ))}
-
-      </CardsWrapper>
-    </ContainerSwiper>
-  );
-};
-
-const ContainerSwiper = styled.div`
-padding:1rem;
-overflow:hidden;
-`;
+import {useState } from 'react';
 
 const CardsWrapper = styled.div`
   border:2px solid red;
@@ -97,30 +9,125 @@ const CardsWrapper = styled.div`
   height:400px;
   width:250px;
   position:relative;
-`;
+`
 
-const Card = styled.div<{ translate: number; }>`
-  user-select:none;
-  width:100%;
-  height:100%;
-  background-color:black;
-  border-radius:1rem;
-  color:white;
+const SwiperContainer = styled.div`
+  padding:1rem;
+  overflow:hidden;
   display:grid;
   place-content:center;
-  font-size:3rem;
-  position:absolute;
-  top:0;
-  left:0;
-
-  &.attached {
-    transform: ${({ translate }) => `translateX(${translate}px) rotate(${translate / 10}deg)`};
-  }
-
-  &.detached {
-    transform: translateX(300px) ;
-  }
-
+`
+// Animação para desaparecer para a direita ou esquerda
+const fadeOut = keyframes`
+  0% { opacity: 1; }
+  100% { opacity: 0;}
 `;
 
-export { Swiper };
+ const StyledCard = styled.div.attrs<{ translateX: number; released: boolean; isTopCard: boolean }>(
+   ({ translateX, isTopCard }) => ({
+     style: {
+       transform: isTopCard? `translateX(${translateX}px) rotate(${translateX / 10}deg)` : undefined,
+     },
+   })
+ )<{ isTopCard: boolean; released: boolean }>`
+   width: 100%;
+   height: 100%;
+   background-color: gray;
+   position: absolute;
+
+   ${({ released, isTopCard }) =>
+     released && isTopCard &&
+     css`
+       transition: 0.2s ease;
+       animation: ${fadeOut} 0.2s ease forwards;
+     `}
+ `;
+
+
+
+
+const Swiper = () => {
+
+  const [isDragging , setIsDragging] = useState<boolean>(false)
+  const [isReleased, setIsReleased] = useState<boolean>(false)
+  const [translateX , setTranslateX] = useState<number>(0)
+  const [startPosition, setStartPosition] = useState<number>(0);
+
+  const [cards, setCards] = useState(["Card 1", "Card 2", "Card 3", "Card 4", "Card 5"]);
+
+
+  const handleMouseDown = (e:any) =>{
+    setStartPosition(e.clientX)
+    setIsDragging(true)
+    setIsReleased(false)
+  }
+
+  const handleMouseMove = (e:any) =>{
+    if (isDragging) {
+      const currentPosition = e.clientX;
+      setTranslateX(currentPosition - startPosition);
+    }
+  }
+
+
+  const handleMouseUp = (e:any) =>{
+    setIsDragging(false)
+    setTranslateX(0)
+        
+    //se moveu o suficiente release
+    if(translateX < -120 ){
+      setIsReleased(true)
+      alert('is released left')
+      handleRemoveCard()
+      
+    }
+
+    if(translateX > 120 ){
+      setIsReleased(true)
+      alert('is released rigth')
+      handleRemoveCard()
+    }
+    
+  }
+
+  // Remover a carta do topo
+  const handleRemoveCard = () => {
+
+    setTimeout(() => {
+      setCards((prevCards) => prevCards.slice(1));
+    }, 1000);
+  };
+
+
+  return(
+    <SwiperContainer>
+      <p>{translateX}</p>
+      
+      <CardsWrapper
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+        
+      >
+
+        {cards.map((card, index)=>(
+          <StyledCard
+          key ={index}
+          translateX={translateX}
+          isTopCard={index === 0} // Indica se é o card do topo
+          released={isReleased}
+          style = {{
+            zIndex: cards.length - index,
+          }}
+          >
+            <p>{card}</p>
+            <p>{index}</p>
+          </StyledCard>
+        ))}
+      </CardsWrapper>
+
+    </SwiperContainer>
+  )
+}
+  
+export { Swiper }
