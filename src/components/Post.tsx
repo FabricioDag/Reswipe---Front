@@ -32,27 +32,48 @@ const InteractiveWrapper = styled.div`
   gap:1rem
 `;
 
-const Post = () => {
+const Post = ({postAuthor, postContent, dateCreation, likes, comments, saves, postId}) => {
+  
+  const handleLike = async () =>{
+
+    try {
+      // Supondo que o ID do usuário seja "user123", você pode ajustar conforme necessário.
+      const userId = "user123";
+      const response = await fetch(`http://localhost:3001/posts/${postId}/like`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userId }),
+      });
+
+      
+    } catch (error) {
+      console.error("Erro ao dar like:", error);
+    }
+  }
+  
   return (
     <PostWrapper>
       <PostHeader>
         <PostHeaderIcon />
-        <PostHeaderUser>Fabrício</PostHeaderUser>
+        <PostHeaderUser>Autor:{postAuthor}</PostHeaderUser>
+        <p>{postId}</p>
       </PostHeader>
 
       <p>
-        Contrary to popular belief, Lorem Ipsum is not simply random text. It
-        has roots in a piece of classical Latin literature from 45 BC, making it
-        over 2000 years old. Richard McClintock, a Latin professor at
-        Hampden-Sydney College in Virginia
+        {postContent}
       </p>
+      <small>
+        {new Date(dateCreation).toLocaleDateString()}
+      </small>
 
       <PostImageArea />
 
       <InteractiveWrapper>
-        <p>like</p>
-        <p>comment</p>
-        <p>save</p>
+        <button onClick={handleLike}>likes {likes.length}</button>
+        <button>comments {comments.length}</button>
+        <button>saves {saves.length}</button>
       </InteractiveWrapper>
     </PostWrapper>
   );

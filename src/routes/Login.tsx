@@ -7,33 +7,33 @@ const Login = () =>{
 
     const [message, setMessage] = useState("");
 
-    const handleLogin = async (e) =>{
-        e.preventDefault()
-        try{
-            const response = await fetch("https://localhost:3001/api",{
-                method:"POST",
-                headers: {
-                    "Content-Type": "application/json",
-                  },
-                body: JSON.stringify(`"name":${username}; "password":${password}`),
-            })
+    // const handleLogin = async (e) =>{
+    //     e.preventDefault()
+    //     try{
+    //         const response = await fetch("https://localhost:3001/api",{
+    //             method:"POST",
+    //             headers: {
+    //                 "Content-Type": "application/json",
+    //               },
+    //             body: JSON.stringify(`"name":${username}; "password":${password}`),
+    //         })
 
 
-            if (response.ok) {
-                const data = await response.json();
-                setMessage(data.message);
-                // Armazene o token no localStorage ou state para autenticação futura
-                localStorage.setItem("token", data.token);
-              } else {
-                const errorData = await response.json();
-                setMessage(errorData.message);
-              }
+    //         if (response.ok) {
+    //             const data = await response.json();
+    //             setMessage(data.message);
+    //             // Armazene o token no localStorage ou state para autenticação futura
+    //             localStorage.setItem("token", data.token);
+    //           } else {
+    //             const errorData = await response.json();
+    //             setMessage(errorData.message);
+    //           }
 
-        }catch (error) {
-            console.error("Erro ao fazer login:", error);
-            setMessage("Erro ao fazer login");
-          }
-    }
+    //     }catch (error) {
+    //         console.error("Erro ao fazer login:", error);
+    //         setMessage("Erro ao fazer login");
+    //       }
+    // }
 
     return(
         <form onSubmit={handleLogin}>
