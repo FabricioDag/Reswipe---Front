@@ -1,55 +1,40 @@
 import{useState, useEffect} from 'react'
 
-interface Recipe {
-  _id: string;
-  title: string;
-  description: string;
-  ingredients: string[];
-  instructions: string;
-  createdBy: string;
-  createdAt: string;
-}
+import {FormLogin, FormRegister} from '../components'
 
 const Profile = () => {
 
-  const [data, setData] = useState<Recipe[]>([]);
+  const [isLogged, setIsLogged] = useState<boolean>(!!localStorage.getItem("authToken") || false)
 
-   useEffect(() => {
-       fetch("http://localhost:3001/recipes/listRecipes")
-       .then((response) => response.json())
-       .then((data :Recipe[]) => setData(data))
-       .catch((error) => console.error("Erro ao buscar dados:", error));
-   }, []);
+  const handleLogout = () =>{
+    localStorage.removeItem("authToken")
+    setIsLogged(false)
+  }
+
+  
+
   return (
     <>
       <div className="App">
-        {/* <h2>Perfil usuario</h2>
-        <p>minhas receitas</p>
-        <p>minhas receitas salvas</p>
-        <p>publicar receita</p>
-        <p>medalhas</p>
-        <p>configurações e privacidade</p>
-        <p>sair da conta</p>
-        <p>cozinheiros seguidos</p>
-        <p>cozinheiros seguidores</p> */}
-
+        
         {
-          data.map((recipe)=>(
-            <div>
-              <h2>{recipe.title}</h2>
-            <p>{recipe.description}</p>
-            <ul>
-              {recipe.ingredients.map((ingredient, index) => (
-                <li key={index}>{ingredient}</li>
-              ))}
-            </ul>
-            <p><strong>Instructions:</strong> {recipe.instructions}</p>
-            <p><strong>Created By:</strong> {recipe.createdBy}</p>
-            <p><strong>Created At:</strong> {new Date(recipe.createdAt).toLocaleDateString()}</p>
-            <p>ID: {recipe._id}</p>
-            </div>
-          ))
+          isLogged? (
+            <>
+              <h1>logado</h1>
+              <button onClick={handleLogout}>logout</button>
+            </>
+          ):
+          (
+            <>
+              <h2>nao logado</h2>
+
+             <FormLogin setIsLogged={setIsLogged}/>
+             <FormRegister />
+             
+            </>
+          )
         }
+        
       </div>
     </>
   );

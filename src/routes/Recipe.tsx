@@ -15,7 +15,7 @@ interface Recipe {
 const Recipe = () => {
 
   const { id } = useParams(); // Recebe o id da URL
-  const [recipe, setRecipe] = useState<Recipe[]>();
+  const [recipe, setRecipe] = useState<Recipe>();
 
   useEffect(() => {
     fetch(`http://localhost:3001/api/recipes/${id}`)
