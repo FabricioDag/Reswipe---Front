@@ -6,7 +6,7 @@ interface RegisterUserFormData {
     email: string;
     password: string;
     confirmPassword:string;
-    birthdate: Date;
+    birthDate: string;
   }
 
 const FormRegister = () =>{
@@ -39,7 +39,7 @@ const FormRegister = () =>{
           const data = await response.json();
           console.log('Usuário logado com sucesso:', data);
     
-          setFormDataRegister({name:'', email: '', password: '' ,confirmPassword:'', birthdate:''});
+          setFormDataRegister({name:'', email: '', password: '' ,confirmPassword:'', birthDate:''});
     
           // faz o login com os dados do usuario novo
           
@@ -55,7 +55,7 @@ const FormRegister = () =>{
         email: '',
         password: '',
         confirmPassword:'',
-        birthdate:''
+        birthDate: ''
     })
 
     // Estado para a mensagem de erro
@@ -126,9 +126,9 @@ const FormRegister = () =>{
                   <label htmlFor="">Data Nascimento</label>
                   <input 
                   type="date"
-                  id="birthdate"
-                  name="birthdate"
-                  value={formDataRegister.birthdate}
+                  id="birthDate"
+                  name="birthDate"
+                  value={formDataRegister.birthDate}
                   onChange={handleChangeRegister} 
                   />
                 </div>
